@@ -1,0 +1,31 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Setup Nodejs
+        uses: actions/setup-node@master
+        with:
+          node-version: 12.x
+
+      - name: Build
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v2.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./build
